@@ -1,28 +1,49 @@
 
 <!-- vim-markdown-toc GFM -->
 
-* [1. 范围for](#1-范围for)
-* [2. bool](#2-bool)
-* [3. new - delete](#3-new---delete)
-* [4. 指针](#4-指针)
-* [5. 函数重载](#5-函数重载)
-* [6. 函数默认参数](#6-函数默认参数)
-* [7. 引用](#7-引用)
-* [8. 函数参数的传递方式](#8-函数参数的传递方式)
-* [9. 构造函数](#9-构造函数)
-* [10. 析构函数](#10-析构函数)
-* [11. List类](#11-list类)
-* [12. 设计原则](#12-设计原则)
-* [13. this](#13-this)
-* [14. static](#14-static)
-* [15. const](#15-const)
-* [16. 初始化列表](#16-初始化列表)
-* [17. 类之间的关系](#17-类之间的关系)
-* [18. 继承](#18-继承)
-* [19. 多态](#19-多态)
-* [20. 虚析构](#20-虚析构)
+* [### C++ 基础](#-c-基础)
+        * [1. 范围for](#1-范围for)
+        * [2. bool](#2-bool)
+        * [3. new - delete](#3-new---delete)
+        * [4. 指针](#4-指针)
+        * [5. 函数重载](#5-函数重载)
+        * [6. 函数默认参数](#6-函数默认参数)
+        * [7. 引用](#7-引用)
+        * [8. 函数参数的传递方式](#8-函数参数的传递方式)
+        * [9. 构造函数](#9-构造函数)
+        * [10. 析构函数](#10-析构函数)
+        * [11. List类](#11-list类)
+        * [12. 设计原则](#12-设计原则)
+        * [13. this](#13-this)
+        * [14. static](#14-static)
+        * [15. const](#15-const)
+        * [16. 初始化列表](#16-初始化列表)
+        * [17. 类之间的关系](#17-类之间的关系)
+        * [18. 继承](#18-继承)
+        * [19. 多态](#19-多态)
+        * [20. 虚析构](#20-虚析构)
+        * [21. 抽象类 与 接口类](#21-抽象类-与-接口类)
+        * [22. 重载操作符](#22-重载操作符)
+        * [23. 拷贝构造](#23-拷贝构造)
+        * [24. 设计模式](#24-设计模式)
+* [### STL基础](#-stl基础)
+        * [1. list](#1-list)
+        * [2. vector](#2-vector)
+        * [3. stack](#3-stack)
+        * [4. queue](#4-queue)
+        * [5. map](#5-map)
+        * [6. hash_map](#6-hash_map)
+* [### ALGORITHM基础](#-algorithm基础)
+        * [1. 随机排列](#1-随机排列)
+        * [2. 排序](#2-排序)
+        * [3. 反转](#3-反转)
+        * [4. 统计个数](#4-统计个数)
+        * [5. 查找](#5-查找)
+        * [6. 遍历](#6-遍历)
 
 <!-- vim-markdown-toc -->
+### C++ 基础
+---
 #### 1. 范围for
 ````c++
 int arr[10] = {1,2,3,4,5,6,7,8,9,0}; 
@@ -547,6 +568,7 @@ int main()
 - 在父类的函数前加virtual 变成虚函数，使得父类指针可以调用子类的<br>
 - 虚函数，通过父类的指针调用实际的子类的成员函数
 - 前提是，子类中需要重写这个函数
+- 指针 和 引用 可以实现多态，对象不可以
 - 优点：<br>
 提高复用性和扩展性<br>
 - 缺点：<br>
@@ -593,7 +615,6 @@ void Bottle(CWater *p)
     p->Show();
 }
 
-
 int main()
 {
     CCoco *coco =  new CCoco;
@@ -608,3 +629,391 @@ int main()
 ```
 #### 20. 虚析构
 - 通过父类的指针去完整删除一个子类的对象，防止内存泄漏
+
+#### 21. 抽象类 与 接口类
+- 纯虚函数<br>
+-- 包含纯虚函数的类叫抽象类，是不能定义对象的<br>
+-- 它要求强制派生类，将纯虚函数重写<br>
+-- 如果不重写，父类和子类都不能定义对象<br>
+```c++
+class CFather
+{
+pujblic:
+    virtual void Show() = 0;
+};
+class CSon : public CFather
+{
+public:
+    virtual void Show()
+    {
+        cout<<"show"<<endl;
+    }
+};
+void AA(CFahter *pf)
+{
+    pf->Show();
+}
+```
+- 接口类<br>
+-- 如果一个类中所以函数都是纯虚函数，这个类叫做接口类
+#### 22. 重载操作符
+- 重载操作符都要有返回值，因为要继续的和其他符号结合<br>
+- 类内重载 operator 操作符号 （一个参数，是载符号左边的）<br>
+- 类外重载 需要两个参数，第一个是符号左边，第二个是符号右边<br>
+```c++
+class CNum
+{
+    public:
+        int m_nNum;
+    public:
+    CNum()
+    {
+        m_nNum = 11;
+    }
+    ~CNum()
+    {}
+public:
+    int operator=(int num)
+    {
+        m_nNum = num;
+        return m_nNum;
+    }
+    int operator+(int num)
+    {
+        m_nNum += num;
+        return m_nNum;
+    }
+    int operator+(int num)
+    {
+        m_nNum = num + m_nNum;
+        return m_nNUm;
+    }
+};
+
+ostream& operator<<(ostream& os,CNum& num)
+{
+    os<<num.m_nNum;
+    return os;
+}
+
+istream& operator>>(istream& is,CNum& num)
+{
+    is>>num.m_nNum;
+    return is;
+}
+
+int main()
+{
+    CNum aa;
+    cout<<aa.m_nNum<<endl;
+    aa = 100;
+    cout<<aa.m_nNum<<endl;
+    return 0;
+}
+```
+#### 23. 拷贝构造
+- 拷贝构造函数，参数是当前这个类的一个const类型的引用
+- 默认是浅拷贝
+- 拷贝构造的作用<br>
+-- 复制一个对象<br>
+```c++
+CPerson(const CPerson& pp)
+{
+    this->m_nAge = new int;
+    *(this->m_nAge) = *(pp.m_nAge);
+}
+```
+#### 24. 设计模式
+- 单例模式<br>
+-- 类只创建一个对象
+```
+class CPerson
+{
+private:
+    static CPerson* ps;
+    CPerson()
+    {}
+    ~CPerson()
+    {}
+public:
+    static CPersonr* GetObject()
+    {
+        if(ps == 0)
+        {
+            ps = new CPerson;
+        }
+        return ps;
+    }
+};
+CPerson* CPerson::ps = 0;
+```
+- 模版方法<br>
+-- 模版方法是当过程一样，只有一些细微的变化，单独变成纯虚函数，让子类重写这一点就可以
+### STL基础
+---
+#### 1. list
+```c++
+//定义
+list<int> lst;
+```
+```c++
+//尾添加
+lst.push_back(1);
+lst.push_back(2);
+```
+```c++
+//头添加
+lst.push_front(100);
+lst.push_front(200);
+```
+```c++
+//尾删除
+lst.pop_back();
+```
+```c++
+//头删除
+lst.pop_front();
+```
+```c++
+//指定数字前插入
+list<int>:: iterator itePos = ::find(lst.begin,lst.end(),1);//数字1前插入
+lst.insert(itePos,200);
+```
+```c++
+//指定数字删除
+list<int>:: iterator itePos = ::find(lst.begin,lst.end(),1);
+lst.erase(itePos);
+```
+```c++
+//输出--方法一
+list<int>::iterator ite = lst.begin();
+while(ite != lst.end())
+{
+    cout<<*ite<<" ";
+    ite++;
+}
+cout<<endl;
+```
+```c++
+//输出--方法二
+void Show(int nVal)
+{
+    cout<<nVal<<" ";
+}
+int main()
+{
+    ::for_each(lst.begin(),lst.end(),&Show);
+    cout<<endl;
+}
+```
+```c++
+//判断是否为空
+cout<<lst.empty()<<endl;
+```
+```c++
+//清空
+lst.clear();
+```
+```c++
+//元素的个数
+lst.size();
+```
+#### 2. vector
+``` c++
+//定义
+vector<int> vec;
+vector<int> vec(10);//一个数组有10个元素
+vector<int> vec[10];//10个数组，每个数组里都是一个vector
+````
+````c++
+//输出--方法一
+vector<int>::iterator ite = vec.begin();
+while(ite != vec.end())
+{
+    cout<<*ite<<" ";
+    ite++;
+}
+cout<<endl;
+````
+````c++
+//输出--方法二
+for(int i = 0; i < vec.size();i++)
+{
+    cout<<vec[i]<<" ";
+}
+cout<<endl;
+````
+````c++
+//输出--方法三
+void Show(int nVal)
+{
+    cout<<nVal<<" ";
+}
+int main()
+{
+    ::for_each(vec.begin,vec.end(),&Show);
+}
+````
+````c++
+//头节点内容
+vec.front();
+````
+````c++
+//尾节点的内容
+vec.back();
+````
+````c++
+//返回使用空间的大小
+vec.size();
+````
+````c++
+//返回使用容量的大小
+vec.capacity();//vector当空间不足的时候会自动扩充空间，新空间是原来的1.5倍
+````
+````c++
+//添加
+vec.push_back(1);//只能尾添加,和list不同
+````
+````c++
+//删除
+vec.pop_back();
+````
+````c++
+//指定位置插入
+vector<int>::iterator itePos = ::find(vec.begin(),vec.end(),1);
+vec.insert(itePos,100);//在1的前面放一个1000
+````
+````c++
+//指定数字删除
+vector<int>:: iterator itePos = ::find(vec.begin,vec.end(),1);
+vec.erase(itePos);
+````
+- 使用vector 尽量不要在中间插入，中间删除，如果要中间插入删除比较多可以使用list。
+#### 3. stack
+````c++
+//定义
+stack<int> sk;
+````
+````c++
+//添加
+sk.push(1);
+````
+- 栈和队列没有迭代器
+````c++
+//输出
+while(sk.empty() != NULL)
+{
+    cout<<sk.top()<<" ";
+    sk.pop();
+}
+cout<<endl;
+````
+#### 4. queue
+````c++
+//定义
+queuq<int> qu;
+````
+````c++
+//添加
+qu.push(1);
+````
+````c++
+//输出
+while(qu.empty() == false)
+{
+    cout<<qu.front()<<" ";
+    qu.pop();
+}
+cout<<endl;
+````
+- 栈和队列都是用来临时存储数据的，初始状态和终止状态都应该是空
+#### 5. map
+- map <键值 实值>
+- 所有元素都会根据元素的键值自动排序，map的所有元素都是一对的，map不允许两个元素有相同的键值
+````c++
+//定义
+map<char, int> mp;
+mp['D'] = 100;
+mp['F'] = 200;
+````
+````c++
+//输出--方法一
+map<char,int>::iterator ite = mp.begin();
+while(ite != mp.end())
+{
+    cout<<ite->first<<" "<<ite->second<<endl;
+    ite++;
+}
+````
+````c++
+//输出--方法二
+void Show(pair<char,int> pr)
+{
+    cout<<pr.first<<" "<<pr.second<<endl;
+}
+int main()
+{
+    for_each(mp.begin(),mp.end(),&Show);
+}
+````
+- 不可以通过迭代器来修改键值，但可以修改实值
+````c++
+//删除
+map<char,int>::iterator itePos = mp.find('C');
+mp.erase(itePos);
+````
+````c++
+//插入
+pair<char, int> pr('C',567);
+mp.insert(pr);
+````
+````c++
+//判断键值是否存在
+cout<<mp.count('C')<<endl;
+````
+- map的内部结构是RBTree
+- 查找的效率O(log2n)
+#### 6. hash_map
+- 内部结构是 hash_table
+- 查找的效率是O(1)
+
+### ALGORITHM基础
+---
+#### 1. 随机排列
+```c++
+srand((unsigned int)time(0));
+::random_shuffle(vec.begin(),vec.end());
+````
+#### 2. 排序
+````c++
+::sort(vec.begin(),vec.end());//默认从小到大
+//从大到小
+bool Rule(int a, int b)
+{
+    return a>b;
+}
+::sort(vec.begin(),vec.end(),&Rule);
+//sort中包含了快速排序，堆排序，插入排序
+````
+#### 3. 反转
+````c++
+::reverse(vec.begin(),vec.end());
+````
+#### 4. 统计个数
+````c++
+//统计1出现了几次
+::count(vec.begin(),vec.end(),1);
+````
+#### 5. 查找
+````c++
+::find(vec.begin(),vec.end(),100);
+````
+#### 6. 遍历
+````c++
+::for_each(vec.begin(),vec.end(),&Show);
+````
+
+
+
+
+
